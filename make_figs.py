@@ -129,9 +129,9 @@ fig.tight_layout(pad=0.25)
 fig.savefig(ROOT + 'figures/fig3_N.pdf')
 
 # ---------------------------------------- Fig. S1 (wide variant of Fig. 3)
-# The revised letter moves the decay with N to the supplement, where only about
-# one text line of height is available. Same data and curves, reshaped.
-fig, ax3 = plt.subplots(figsize=(3.4, 0.78), dpi=300)
+# The revised letter moves the decay with N to the supplement, where it closes
+# the first page. Same data and curves, reshaped.
+fig, ax3 = plt.subplots(figsize=(3.4, 1.4), dpi=300)
 for row in arr:
     ax3.plot(NS, np.maximum(row, 1e-5), '-', color='0.78', lw=0.4, alpha=0.8)
 ax3.plot(NS, np.median(arr, 0), '-o', color='#d62728', ms=2.5, lw=1.2, label='median')
