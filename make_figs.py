@@ -127,4 +127,30 @@ ax2.spines['top'].set_visible(False)
 ax2.spines['right'].set_visible(False)
 fig.tight_layout(pad=0.25)
 fig.savefig(ROOT + 'figures/fig3_N.pdf')
-print('saved fig1, fig2, fig3')
+
+# ---------------------------------------- Fig. S1 (wide variant of Fig. 3)
+# The revised letter moves the decay with N to the supplement, where only about
+# one text line of height is available. Same data and curves, reshaped.
+fig, ax3 = plt.subplots(figsize=(3.4, 0.95), dpi=300)
+for row in arr:
+    ax3.plot(NS, np.maximum(row, 1e-5), '-', color='0.78', lw=0.4, alpha=0.8)
+ax3.plot(NS, np.median(arr, 0), '-o', color='#d62728', ms=2.5, lw=1.2, label='median')
+ax3.plot(NS, [max(n10['worst'][str(k)], 1e-5) for k in NS], '-s', color='k',
+         ms=2, lw=0.9, label='worst configuration')
+ax3.set_xscale('log', base=2)
+ax3.set_yscale('log')
+ax3.set_xticks(NS)
+ax3.set_xticklabels([str(k) for k in NS])
+ax3.set_ylim(1e-4, 0.3)
+ax3.set_yticks([1e-4, 1e-3, 1e-2, 1e-1])
+ax3.set_xlabel(r'observations per decision $N$', fontsize=6, labelpad=1)
+ax3.set_ylabel(r'$\mathrm{P}$(no winner)', fontsize=6, labelpad=1)
+ax3.tick_params(labelsize=5.5, pad=1.5, length=2)
+ax3.axhline(0.01, color='0.6', lw=0.5, ls=':')
+ax3.legend(frameon=False, fontsize=5.5, loc='lower left', handlelength=1.2,
+           borderaxespad=0.1, labelspacing=0.1)
+ax3.spines['top'].set_visible(False)
+ax3.spines['right'].set_visible(False)
+fig.tight_layout(pad=0.2)
+fig.savefig(ROOT + 'figures/fig3_N_wide.pdf')
+print('saved fig1, fig2, fig3, fig3_wide')

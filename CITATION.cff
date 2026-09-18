@@ -6,14 +6,15 @@ authors:
   - family-names: "Zabolotnii"
     given-names: "Serhii"
     orcid: "https://orcid.org/0000-0003-0242-2234"
-version: "0.2.0"
-date-released: "2026-08-18"
+version: "1.1.0"
+date-released: "2026-09-18"
 license: MIT
 keywords:
   - "M-ary detection"
   - "non-Gaussian noise"
   - "moment criterion"
-  - "deflection"
+  - "Fisher criterion"
+  - "triangular discrimination"
   - "Kunchenko stochastic polynomials"
   - "pairwise coupling"
   - "Condorcet"
