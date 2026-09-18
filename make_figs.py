@@ -131,7 +131,7 @@ fig.savefig(ROOT + 'figures/fig3_N.pdf')
 # ---------------------------------------- Fig. S1 (wide variant of Fig. 3)
 # The revised letter moves the decay with N to the supplement, where only about
 # one text line of height is available. Same data and curves, reshaped.
-fig, ax3 = plt.subplots(figsize=(3.4, 0.95), dpi=300)
+fig, ax3 = plt.subplots(figsize=(3.4, 0.78), dpi=300)
 for row in arr:
     ax3.plot(NS, np.maximum(row, 1e-5), '-', color='0.78', lw=0.4, alpha=0.8)
 ax3.plot(NS, np.median(arr, 0), '-o', color='#d62728', ms=2.5, lw=1.2, label='median')
@@ -143,11 +143,11 @@ ax3.set_xticks(NS)
 ax3.set_xticklabels([str(k) for k in NS])
 ax3.set_ylim(1e-4, 0.3)
 ax3.set_yticks([1e-4, 1e-3, 1e-2, 1e-1])
-ax3.set_xlabel(r'observations per decision $N$', fontsize=6, labelpad=1)
-ax3.set_ylabel(r'$\mathrm{P}$(no winner)', fontsize=6, labelpad=1)
-ax3.tick_params(labelsize=5.5, pad=1.5, length=2)
+ax3.set_xlabel(r'observations per decision $N$', fontsize=7, labelpad=2)
+ax3.set_ylabel(r'$\mathrm{P}$(no winner)', fontsize=7, labelpad=2)
+ax3.tick_params(labelsize=6.5, pad=2, length=2.5)
 ax3.axhline(0.01, color='0.6', lw=0.5, ls=':')
-ax3.legend(frameon=False, fontsize=5.5, loc='lower left', handlelength=1.2,
+ax3.legend(frameon=False, fontsize=6.5, loc='lower left', handlelength=1.3,
            borderaxespad=0.1, labelspacing=0.1)
 ax3.spines['top'].set_visible(False)
 ax3.spines['right'].set_visible(False)
