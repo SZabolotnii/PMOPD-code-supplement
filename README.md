@@ -8,10 +8,11 @@ This repository is deliberately separate from the manuscript repository. It cont
 only code, computed JSON summaries, rendered figures and the Lean formalization.
 
 **This version corresponds to the resubmitted letter (September 2026).** Relative to
-v1.0.0 it adds the five studies the reviewers asked for — an analytical example of the
+v1.0.0 it adds the six studies the reviewers asked for — an analytical example of the
 undecided event, three further noise families, the low-error regimes, the shift
-sensitivity of the fractional basis and a bootstrap over configurations — and the
-supplemental material's Fig. S1. Nothing from v1.0.0 was removed or recomputed; the
+sensitivity of the fractional basis, a bootstrap over configurations, and the
+calibration/larger-M/unequal-priors measurements — and the supplemental material's
+Fig. S1. Nothing from v1.0.0 was removed or recomputed; the
 `v1`–`v11` scripts and their JSON are unchanged, which is why the original Table I
 numbers still reproduce exactly.
 
@@ -45,10 +46,11 @@ Added for the resubmission:
 | **L§V, S-IV**  Why the gain is a skewness effect: the 2 × 2 design (shape × tail) over `s = 2…5`, lognormal and generalized-Gaussian families, and the impulsive dose-response | `verification/v14_why_no_gain.py` |
 | **L§II-A, S-IV**  Shift sensitivity of the fractional basis (with the power basis as the control), per-configuration rows for the bootstrap, and where the information sits in the tail | `verification/v15_open_checks.py` |
 | **L§V, S-IV**  Low-error regimes `L = 16, 25, 40` (Bayes error 0.23, 0.15, 0.08) | `verification/v16_low_error.py` |
+| **S-V**  Calibration error resolved against the skewness of `Λ_mn`; `M = 6, 8, 10`; unequal priors and the one-term correction `z_mn + log(π_n/π_m)` | `verification/v17_open_promises.py` (parts `K`, `M`, `P`) |
 
 The added scripts build on the earlier ones rather than duplicating them: `v13` imports
 the scenario stream and the coupling from `v8_table1.py`, `v14` extends `v13`'s noise
-model, and `v15` and `v16` reuse `v14`'s configuration generator. Run them from the
+model, and `v15`, `v16` and `v17` reuse `v14`'s configuration generator. Run them from the
 repository root so those imports resolve.
 
 `verification/p2_intransitivity.py` is the shared core: the scenario model
@@ -68,12 +70,13 @@ python3 verification/v13_heavy_tails.py    # S-IV, moderate regimes and further 
 python3 verification/v14_why_no_gain.py A  # S-IV, the 2 x 2 design (then B, C)
 python3 verification/v15_open_checks.py S  # shift study (then R, T)
 python3 verification/v16_low_error.py      # S-IV, low-error regimes
+python3 verification/v17_open_promises.py K  # S-V, calibration vs skewness (then M, P)
 python3 make_figs.py                       # renders everything in figures/
 ```
 
 Scripts are run from the repository root and write their JSON next to themselves in
 `verification/`. All of them are seeded — `SEED = 20260817` for the original set,
-`20260917`–`20260921` for the added ones, with the shared configuration generator
+`20260917`–`20260922` for the added ones, with the shared configuration generator
 `numpy.random.default_rng(2026)` — so a rerun reproduces the published numbers up to
 the Monte Carlo error stated in the letter.
 
@@ -83,8 +86,8 @@ writes a short run to the same path. Keep a copy if the published JSON matters t
 
 Runtimes on a 16-core laptop: `v8_table1.py` about 6 min, `v3_gap_vs_s_M.py` about
 1.5 min, `v10_N_observations.py` about 8 min, `v12_analytic_cycle.py` about 2.5 min,
-`v13_heavy_tails.py` about 30 min, `v16_low_error.py` about 5 min, the rest under
-2 min each.
+`v13_heavy_tails.py` about 30 min, `v16_low_error.py` about 5 min, `v17_open_promises.py M`
+about 3.5 min, the rest under 2 min each.
 
 ## Lean formalization
 
