@@ -7,14 +7,19 @@ Reproducibility code for the letter
 This repository is deliberately separate from the manuscript repository. It contains
 only code, computed JSON summaries, rendered figures and the Lean formalization.
 
-**This version corresponds to the resubmitted letter (September 2026).** Relative to
-v1.0.0 it adds the six studies the reviewers asked for — an analytical example of the
-undecided event, three further noise families, the low-error regimes, the shift
-sensitivity of the fractional basis, a bootstrap over configurations, and the
-calibration/larger-M/unequal-priors measurements — and the supplemental material's
-Fig. S1. Nothing from v1.0.0 was removed or recomputed; the
-`v1`–`v11` scripts and their JSON are unchanged, which is why the original Table I
-numbers still reproduce exactly.
+**This version (v1.3.0) corresponds to the revised letter `SPL-48917-2026.R1`
+(November 2026).** It adds two scripts: `v18_qda_heteroscedastic.py`, which compares
+quadratic discrimination on the observation with the completions when the noise
+variances differ, and `v19_traceability.py`, which recomputes and stores the numbers the
+letter printed but no earlier script had written to a file. Nothing earlier was removed
+or recomputed.
+
+v1.1.0–v1.2.2 (September 2026, the resubmitted letter) added the six studies the
+reviewers asked for — an analytical example of the undecided event, three further noise
+families, the low-error regimes, the shift sensitivity of the fractional basis, a
+bootstrap over configurations, and the calibration/larger-M/unequal-priors measurements —
+and the figure of the decay with `N`. The `v1`–`v11` scripts and their JSON are unchanged
+since v1.0.0, which is why the original Table I numbers still reproduce exactly.
 
 Section numbers below refer to the letter (L) and to its supplemental material (S).
 
@@ -29,7 +34,7 @@ Section numbers below refer to the letter (L) and to its supplemental material (
 | §III  `s = 1` is nearest-mean and never undecided | `verification/s1_linear_baseline.py` |
 | §IV, Prop. 4  Copeland ties: undecided ⇒ tie at the top for `M ≤ 4`; conservativeness over `5.8·10⁷` decided events | `verification/v1_copeland_ties.py` |
 | **L Fig. 1**  Fraction of configurations above 1 %, with intransitivity for comparison | `verification/v3_gap_vs_s_M.py`, `v3_gap_vs_s_M_repro.py` |
-| **S Fig. S1**  Decay with the number of observations `N` per decision | `verification/v10_N_observations.py` |
+| **S-III**  Decay with the number of observations `N` per decision (Fig. S1 of the resubmitted supplement; in the revised supplement only its numbers remain, the figure is `figures/fig3_N.pdf`) | `verification/v10_N_observations.py` |
 | **L Table I**  Linear, pooled, Copeland, coupling, Bayes on the same 120 configurations | `verification/v8_table1.py` |
 | L§V  Robustness to a training set of 500 and 5000 samples per hypothesis | `verification/v9_trainsize_coupling.py` |
 | L§II  Threshold ablation: mid-mean versus Gaussian equal-error and Gaussian-MAP thresholds | `verification/v11_threshold_and_ovm.py` |
@@ -48,10 +53,21 @@ Added for the resubmission:
 | **L§V, S-IV**  Low-error regimes `L = 16, 25, 40` (Bayes error 0.23, 0.15, 0.08) | `verification/v16_low_error.py` |
 | **S-V**  Calibration error resolved against the skewness of `Λ_mn`; `M = 6, 8, 10`; unequal priors and the one-term correction `z_mn + log(π_n/π_m)` | `verification/v17_open_promises.py` (parts `K`, `M`, `P`) |
 
+Added for the revision `SPL-48917-2026.R1`:
+
+| claim | script |
+|---|---|
+| **L§V, S-VI**  Quadratic discrimination on `x` against the completions under unequal noise variances: the same 120 configurations, per-class scales `σ_m = r^U`, `U ~ U[−1, 1]`, `r ∈ {1, 1.5, 2}`, Gaussian (QDA is Bayes) and gamma noise, `L ∈ {2.5, 10}`; the unit-scale control reproduces the linear rule decision for decision | `verification/v18_qda_heteroscedastic.py` (seed `20261028`) |
+| **L§III, S-II**  The closed-form example's Bayes error, linear-rule error, posteriors and conditional Bayes error on `U` | `verification/v19_traceability.py` part `E` |
+| **L§V, S-IV**  The variance inflation behind "`Var x³` sixty-fold" and "fractional features less than twofold" | `verification/v19_traceability.py` part `I` |
+| **L Table I**  The projection row's worst-30 error and its CW column, replicating `v11` draw for draw | `verification/v19_traceability.py` part `P` |
+| **L§V**  95 % interval of the mean rank correlation of the undecided probability with each basis diagnostic | `verification/v19_traceability.py` part `C` |
+
 The added scripts build on the earlier ones rather than duplicating them: `v13` imports
 the scenario stream and the coupling from `v8_table1.py`, `v14` extends `v13`'s noise
-model, and `v15`, `v16` and `v17` reuse `v14`'s configuration generator. Run them from the
-repository root so those imports resolve.
+model, `v15`, `v16`, `v17` and `v18` reuse `v14`'s configuration generator, and `v19`
+imports `v11` and `v15` and reads the archived `v8`, `v11` and `cond_predictor` JSON. Run
+them from the repository root so those imports resolve.
 
 `verification/p2_intransitivity.py` is the shared core: the scenario model
 (shifted standardized gamma), the bases, whitening, and the pairwise normal system
@@ -64,25 +80,30 @@ python3 -m pip install -r requirements.txt
 cd <repo root>
 python3 verification/v8_table1.py          # L Table I  (s = 3; pass 2 or 4 for the other degrees)
 python3 verification/v3_gap_vs_s_M.py      # L Fig. 1 data
-python3 verification/v10_N_observations.py # S Fig. S1 data
+python3 verification/v10_N_observations.py # S-III, decay with N
 python3 verification/v12_analytic_cycle.py # S-II, the closed-form example
 python3 verification/v13_heavy_tails.py    # S-IV, moderate regimes and further families
 python3 verification/v14_why_no_gain.py A  # S-IV, the 2 x 2 design (then B, C)
 python3 verification/v15_open_checks.py S  # shift study (then R, T)
 python3 verification/v16_low_error.py      # S-IV, low-error regimes
 python3 verification/v17_open_promises.py K  # S-V, calibration vs skewness (then M, P)
+python3 verification/v18_qda_heteroscedastic.py  # S-VI, QDA under unequal variances
+python3 verification/v19_traceability.py   # parts E, I, P, C (or name one: P)
 python3 make_figs.py                       # renders everything in figures/
 ```
 
 Scripts are run from the repository root and write their JSON next to themselves in
 `verification/`. All of them are seeded — `SEED = 20260817` for the original set,
-`20260917`–`20260922` for the added ones, with the shared configuration generator
+`20260917`–`20260922` and `20261028` for the added ones (`v19` reuses each source
+script's own seed), with the shared configuration generator
 `numpy.random.default_rng(2026)` — so a rerun reproduces the published numbers up to
 the Monte Carlo error stated in the letter.
 
 A caution when rerunning: each script overwrites its own `results_*.json`, and the
 argument that limits the number of configurations (`v16_low_error.py 3`, for instance)
 writes a short run to the same path. Keep a copy if the published JSON matters to you.
+`v18` is the exception: a run with fewer than 120 configurations must name its own output
+file. `v19` merges the parts it runs into its existing JSON.
 
 Runtimes on a 16-core laptop: `v8_table1.py` about 6 min, `v3_gap_vs_s_M.py` about
 1.5 min, `v10_N_observations.py` about 8 min, `v12_analytic_cycle.py` about 2.5 min,
@@ -109,7 +130,7 @@ for inspection; building it requires that project's `lakefile.lean` and toolchai
 ## Scope
 
 The measurements concern per-observation or small-`N` `M`-ary decisions; the
-undecided event decays with `N`, as Fig. S1 shows. The 120 random configurations
+undecided event decays with `N` (`v10_N_observations.py`, `figures/fig3_N.pdf`). The 120 random configurations
 are a deliberately hard regime (error rates near 0.6), chosen so that differences
 between rules are visible. The resubmission adds five better-separated regimes down
 to a Bayes error of 0.08 (`v16_low_error.py`), where the ordering of the completions
@@ -118,7 +139,9 @@ where the undecided event has all but disappeared.
 
 Two limits worth stating plainly. The noise families are gamma, lognormal,
 generalized Gaussian, contaminated Gaussian, Student and impulsively contaminated
-gamma, all scalar and all standardized to unit variance; `M ≤ 6`. And the fractional
+gamma, all scalar and standardized to unit variance except in `v18`, where the class
+variances differ by design; `M ≤ 6` in the panels, up to `M = 10` in `v17` part `M`. And
+the fractional
 basis is not shift-invariant, so its numbers hold for the level placement used here —
 `v15_open_checks.py S` measures how much that matters.
 
